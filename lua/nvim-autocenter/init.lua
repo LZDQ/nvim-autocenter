@@ -21,13 +21,18 @@ end
 function M.setup(opts)
     M.config = vim.tbl_deep_extend('force', default_config, opts or {})
 	if M.config.autopairs then
-		local status, npairs = pcall(require, "nvim-autopairs")
-		if status then
-			npairs.get_rule('{'):replace_map_cr(function ()
-				return '<c-g>u<CR><CMD>normal! ====<CR><up><end><CR>' .. 'x<ESC>zzs'
-			end)
-		end
-
+		vim.api.nvim_create_autocmd("User", {
+			callback = function ()
+				local status, npairs = pcall(require, "nvim-autopairs")
+				if ~status then
+					return
+				end
+				local rule_curly_brackets = npairs.get_rule("{")
+				rule_curly_brackets:replace_map_cr(function ()
+					return '<c-g>u<CR><CMD>normal! ====<CR><up><end><CR>' .. 'x<ESC>zzs'
+				end)
+			end,
+		})
 	end
 end
 
