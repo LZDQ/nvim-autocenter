@@ -4,9 +4,10 @@ Auto zz when inserting.
 
 ## Demo
 
-<div align="center">
-  <video src="screencast/Screencast from 2024-08-27 22-45-15.mov"/></video>
-</div>
+
+https://github.com/user-attachments/assets/df50d1b3-4504-4f16-b0c7-e7eb3551e7a3
+
+
 
 
 ## Requirements
