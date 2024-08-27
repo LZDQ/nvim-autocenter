@@ -1,15 +1,15 @@
 local M = {}
 
 local default_config = {
-    -- auto center only when the cursor is within this range vertically
-	ratio_top = 1/3,
-	ratio_bot = 2/3,
+	-- auto center only when the cursor is within this range vertically
+	ratio_top = 1 / 3,
+	ratio_bot = 2 / 3,
 	-- When to call `autozz`. Choose between 'always', 'empty', and 'never'.
 	-- 'always' means to always do autozz when buffer text changes.
 	-- 'empty'  means to do autozz only when the current line contains whitespaces.
 	-- 'never'  means do not autozz. If you choose never, you should enable autopairs.
 	when = 'empty',
-    -- plugin support
+	-- plugin support
 	plugins = {
 		-- auto center when inserting newline inside curly brackets
 		autopairs = true,
@@ -18,8 +18,8 @@ local default_config = {
 		-- Enable or disable filetypes. Use REGEX!!
 		-- Wildcard * doesn't work, use .* plz.
 		-- disabled rules beats enabled rules when contradicting.
-		enabled = {".*"},
-		disabled = {"json"},
+		enabled = { ".*" },
+		disabled = { "json" },
 	}
 }
 
@@ -75,11 +75,11 @@ end
 
 function M.is_line_blank()
 	local line = vim.api.nvim_get_current_line()
-    return line:match("^%s*$")
+	return line:match("^%s*$")
 end
 
 function M.setup(opts)
-    M.config = vim.tbl_deep_extend('force', default_config, opts or {})
+	M.config = vim.tbl_deep_extend('force', default_config, opts or {})
 
 	if M.config.when == "always" then
 		vim.api.nvim_create_autocmd("TextChangedI", {
@@ -87,7 +87,7 @@ function M.setup(opts)
 		})
 	elseif M.config.when == "empty" then
 		vim.api.nvim_create_autocmd("TextChangedI", {
-			callback = function ()
+			callback = function()
 				-- Check this in advance to avoid lagging nvim
 				if M.within_range() then
 					return
@@ -103,12 +103,12 @@ function M.setup(opts)
 
 	if M.config.plugins.autopairs then
 		vim.api.nvim_create_autocmd("User", {
-			callback = function ()
+			callback = function()
 				local status, npairs = pcall(require, "nvim-autopairs")
 				if not status then
 					return
 				end
-				npairs.get_rule("{"):replace_map_cr(function ()
+				npairs.get_rule("{"):replace_map_cr(function()
 					local res = '<c-g>u<CR><CMD>normal! ====<CR><up><end><CR>'
 					if not M.within_range() then
 						res = res .. 'x<ESC>zzs'
