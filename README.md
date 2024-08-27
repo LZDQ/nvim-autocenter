@@ -2,6 +2,12 @@
 
 Auto zz when inserting.
 
+## Demo
+
+<div align="center">
+  <video src="screencast/Screencast from 2024-08-27 22-45-15.webm"/></video>
+</div>
+
 ## Requirements
 
 Tested only on latest release, but will work on other versions as well.
