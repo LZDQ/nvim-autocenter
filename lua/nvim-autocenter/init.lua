@@ -11,7 +11,7 @@ local default_config = {
 	when = 'empty',
 	-- plugin support
 	plugins = {
-		-- auto center when inserting newline inside curly brackets
+		-- auto center when pressing enter inside curly brackets
 		autopairs = true,
 	},
 	filetypes = {
@@ -50,13 +50,11 @@ function M.check_filetype()
 			return false
 		end
 	end
-	vim.notify("not disabled")
 	for _, pat in ipairs(M.config.filetypes.enabled) do
 		if string.match(vim.bo.filetype, pat) then
 			return true
 		end
 	end
-	vim.notify("not enabled")
 	return false
 end
 
@@ -67,7 +65,6 @@ function M.autozz()
 		return
 	end
 
-	-- vim.notify("autozz")
 	if not M.within_range() then
 		M.center()
 	end

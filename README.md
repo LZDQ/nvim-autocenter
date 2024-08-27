@@ -1,6 +1,6 @@
 # nvim-autocenter
 
-Auto zz when inserting some specific patterns.
+Auto zz when inserting.
 
 ## Requirements
 
@@ -13,6 +13,16 @@ vim-plug
 ```
 Plug 'LZDQ/nvim-autocenter'
 ```
+
+## Usage
+
+Auto center the current line when inserting.
+
+By default, only center the current line when the current line is whitespaces and the cursor is within [1/3, 2/3] of the screen height.
+
+To disable the check of whitespaces and always center when inserting outside the range, change the `when` parameter in the setup to "always".
+
+To disable auto centering when inserting text, change `when` to "never". In this case, you should enable plugin support for nvim-autopairs (auto centering when pressing enter in a pair of curly brackets), or this plugin is completely functionless.
 
 ## Setup
 
@@ -30,7 +40,7 @@ require("nvim-autocenter").setup{
 	when = 'empty',
 	-- plugin support
 	plugins = {
-		-- auto center when inserting newline inside curly brackets
+		-- auto center when pressing enter inside curly brackets
 		autopairs = true,
 	},
 	filetypes = {
