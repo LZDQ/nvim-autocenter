@@ -2,6 +2,10 @@
 
 Auto zz when inserting some specific patterns.
 
+## Requirements
+
+Tested only on latest release, but will work on other versions as well.
+
 ## Installation
 
 vim-plug
@@ -12,11 +16,18 @@ Plug 'LZDQ/nvim-autocenter'
 
 ## Setup
 
-Example setup
+Default setup
 
 ```lua
 require("nvim-autocenter").setup{
-    autopairs = true,  -- auto center when inserting newline inside curly brackets
+    -- auto center only when the cursor is within this range vertically
+    ratio_top = 1/3,
+    ratio_bot = 2/3,
+    -- plugin support
+    plugins = {
+        -- auto center when inserting newline inside curly brackets
+        autopairs = true,
+    }
 }
 ```
 
@@ -24,7 +35,7 @@ require("nvim-autocenter").setup{
 
 This plugin exposes a function.
 
-Calling `autocenter.center` will center the current line. Works with normal and insert mode.
+Calling `require("nvim-autocenter").center()` will center the current line. Works with normal and insert mode.
 
 ## Plugins supported
 
@@ -34,5 +45,5 @@ Automatically center when inserting newline inside curly brackets.
 
 ## TODO list
 
-1. - [ ] Add 1/3 check
-2. - [ ] Add more ratios, not just zz which means 1/2
+1. - [x] Add 1/3 check
+2. - [ ] Not TODO anymore //Add more ratios, not just zz which means 1/2
