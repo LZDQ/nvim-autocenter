@@ -5,8 +5,9 @@ Auto zz when inserting.
 ## Demo
 
 <div align="center">
-  <video src="screencast/Screencast from 2024-08-27 22-45-15.webm"/></video>
+  <video src="screencast/Screencast from 2024-08-27 22-45-15.mov"/></video>
 </div>
+
 
 ## Requirements
 
