@@ -35,7 +35,7 @@ function M.within_range()
 end
 
 function M.check_filetype()
-	if vim.bo.buftype then
+	if vim.bo.buftype ~= "" then
 		return false
 	end
 	for _, pat in ipairs(M.config.filetypes.disabled) do
