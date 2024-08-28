@@ -48,8 +48,17 @@ require("nvim-autocenter").setup{
 	when = 'empty',
 	-- plugin support
 	plugins = {
-		-- auto center when pressing enter inside curly brackets
-		autopairs = true,
+		-- auto center when pressing enter inside specific brackets
+		autopairs = {
+			enabled = true,
+			-- These are rules to auto center when pressing enter after it.
+			-- Each item is the lhs of the rule.
+			rules_with_cr = {
+				"{",
+				"'''",
+				'"""',
+			}
+		}
 	},
 	filetypes = {
 		-- Enable or disable filetypes. Use REGEX!!
@@ -69,4 +78,4 @@ Automatically center when inserting newline inside curly brackets.
 
 ## TODO
 
-1. - [ ] Add more support for nvim-autopairs
+1. - [x] Add more support for nvim-autopairs
