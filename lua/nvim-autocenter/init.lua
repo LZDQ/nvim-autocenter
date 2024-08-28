@@ -35,6 +35,9 @@ function M.within_range()
 end
 
 function M.check_filetype()
+	if vim.bo.buftype then
+		return false
+	end
 	for _, pat in ipairs(M.config.filetypes.disabled) do
 		if string.match(vim.bo.filetype, pat) then
 			return false
@@ -50,10 +53,12 @@ end
 
 -- Center the current line if not within range
 function M.autozz()
+	-- vim.notify("autozz")
 	-- Check filetypes.
 	if not M.check_filetype() then
 		return
 	end
+	-- vim.notify("filetype ok")
 
 	if not M.within_range() then
 		M.center()
