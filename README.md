@@ -38,7 +38,7 @@ Default setup. Leave it empty if you don't want to change it.
 
 ```lua
 require("nvim-autocenter").setup{
-	-- auto center only when the cursor is within this range vertically
+	-- auto center only when the cursor is not within this range vertically
 	ratio_top = 1 / 3,
 	ratio_bot = 2 / 3,
 	-- When to call `autozz`. Choose between 'always', 'empty', and 'never'.
