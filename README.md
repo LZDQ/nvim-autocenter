@@ -67,3 +67,6 @@ require("nvim-autocenter").setup{
 
 Automatically center when inserting newline inside curly brackets.
 
+## TODO
+
+1. - [ ] Add more support for nvim-autopairs
