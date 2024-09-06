@@ -32,17 +32,47 @@ local default_config = {
 	}
 }
 
+local function is_blank_line()
+	return vim.api.nvim_get_current_line():match("^%s*$")
+end
+
+local function at_end_of_line_i()
+	return #vim.api.nvim_get_current_line() == vim.api.nvim_win_get_cursor(0)[2]
+end
+
 -- Center the current line (zz)
 -- Works in insert mode and normal mode
 function M.center()
+	-- Check if line number is the same to avoid recursion and improve functionality
+	local line_num = vim.api.nvim_win_get_cursor(0)[1]
+	if line_num == M.cache.last_line_num then
+		return
+	else
+		M.cache.last_line_num = line_num
+	end
+
 	local mode = vim.api.nvim_get_mode().mode
+
 	if mode == 'i' then
-		-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("x<ESC>zzs", true, false, true), "n", true)
+		if is_blank_line() and at_end_of_line_i() then
+			-- Do cc
+			-- vim.cmd("normal! zz")
+			local line = vim.api.nvim_get_current_line()
+			-- vim.notify("cc. line: " .. line)
+			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("x<ESC>zzxa", true, false, true), "n", true)
+		else
+			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("x<ESC>zzxi", true, false, true), "n", true)
+			-- vim.notify("placeholder. line: " .. line)
+		end
+
 	elseif mode == 'n' then
-		vim.command("normal! zz")
+		vim.cmd("normal! zz")
+
 	else
 		print("Not supported in '" .. mode .. "' mode")
+
 	end
 end
 
@@ -84,13 +114,9 @@ function M.autozz()
 	end
 end
 
-function M.is_line_blank()
-	local line = vim.api.nvim_get_current_line()
-	return line:match("^%s*$")
-end
-
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend('force', default_config, opts or {})
+	M.cache = {}
 
 	if M.config.when == "always" then
 		vim.api.nvim_create_autocmd("TextChangedI", {
@@ -103,7 +129,7 @@ function M.setup(opts)
 				if M.within_range() then
 					return
 				end
-				if M.is_line_blank() then
+				if is_blank_line() then
 					M.autozz()
 				end
 			end
@@ -121,11 +147,11 @@ function M.setup(opts)
 				end
 
 				local function map_cr_autozz()
-					local res = '<c-g>u<CR><CMD>normal! ====<CR><up><end><CR>'
-					if not M.within_range() then
-						res = res .. 'x<ESC>zzs'
+					if M.within_range() then
+						return '<c-g>u<CR><CMD>normal! ====<CR><up><end><CR>'
+					else
+						return '<c-g>u<CR><CMD>normal! ====zz<CR><up><end><CR>'
 					end
-					return res
 				end
 
 				for _, lhs in ipairs(M.config.plugins.autopairs.rules_with_cr) do
