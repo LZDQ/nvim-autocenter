@@ -70,6 +70,10 @@ require("nvim-autocenter").setup{
 }
 ```
 
+## Features
+
+Caching the last line number to avoid recursion and improve performance.
+
 ## Plugins supported
 
 [windwp/nvim-autopairs](https://github.com/windwp/nvim-autopairs)
