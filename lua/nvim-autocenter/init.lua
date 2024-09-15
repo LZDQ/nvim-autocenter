@@ -36,6 +36,10 @@ local function is_blank_line()
 	return vim.api.nvim_get_current_line():match("^%s*$")
 end
 
+local function is_empty_line()
+	return #vim.api.nvim_get_current_line() == 0
+end
+
 local function at_end_of_line_i()
 	return #vim.api.nvim_get_current_line() == vim.api.nvim_win_get_cursor(0)[2]
 end
@@ -54,16 +58,18 @@ function M.center()
 	local mode = vim.api.nvim_get_mode().mode
 
 	if mode == 'i' then
-		if is_blank_line() and at_end_of_line_i() then
-			-- Do cc
-			-- vim.cmd("normal! zz")
-			local line = vim.api.nvim_get_current_line()
+		if is_empty_line() then
+			vim.cmd("normal! zz")
+
+		elseif at_end_of_line_i() then
+			-- local line = vim.api.nvim_get_current_line()
 			-- vim.notify("cc. line: " .. line)
 			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
-			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("x<ESC>zzxa", true, false, true), "n", true)
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('x<ESC>zz"_xa', true, false, true), "n", true)
+			
 		else
 			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
-			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("x<ESC>zzxi", true, false, true), "n", true)
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('x<ESC>zz"_xi', true, false, true), "n", true)
 			-- vim.notify("placeholder. line: " .. line)
 		end
 
