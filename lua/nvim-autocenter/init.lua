@@ -26,7 +26,7 @@ local default_config = {
 	filetypes = {
 		-- Enable or disable filetypes. Use REGEX!!
 		-- Wildcard * doesn't work, use .* plz.
-		-- disabled rules beats enabled rules when contradicting.
+		-- disabled rules beat enabled rules when contradicting.
 		enabled = { ".*" },
 		disabled = { "json" },
 	}
@@ -66,7 +66,7 @@ function M.center()
 			-- vim.notify("cc. line: " .. line)
 			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('x<ESC>zz"_xa', true, false, true), "n", true)
-			
+
 		else
 			-- To avoid spaces being deleted, first insert a placeholder 'x' and delete it later.
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('x<ESC>zz"_xi', true, false, true), "n", true)
@@ -77,7 +77,11 @@ function M.center()
 		vim.cmd("normal! zz")
 
 	else
-		print("Not supported in '" .. mode .. "' mode")
+		vim.notify(
+			string.format("[nvim-autocenter] Not supported in '%s' mode", mode),
+			vim.log.levels.WARN,
+			{ title = "nvim-autocenter" }
+		)
 
 	end
 end
@@ -110,7 +114,7 @@ end
 function M.autozz()
 	-- vim.notify("autozz")
 	-- Check filetypes.
-	if not M.check_filetype() then
+	if not M.enabled or not M.check_filetype() then
 		return
 	end
 	-- vim.notify("filetype ok")
@@ -122,11 +126,15 @@ end
 
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend('force', default_config, opts or {})
+	M.enabled = true
 	M.cache = {}
+
+	local group = vim.api.nvim_create_augroup("nvim-autocenter", { clear = true })
 
 	if M.config.when == "always" then
 		vim.api.nvim_create_autocmd("TextChangedI", {
 			callback = M.autozz,
+			group = group,
 		})
 	elseif M.config.when == "empty" then
 		vim.api.nvim_create_autocmd("TextChangedI", {
@@ -138,7 +146,8 @@ function M.setup(opts)
 				if is_blank_line() then
 					M.autozz()
 				end
-			end
+			end,
+			group = group,
 		})
 	elseif M.config.when == "never" then
 		-- do nothing
@@ -164,7 +173,17 @@ function M.setup(opts)
 					npairs.get_rule(lhs):replace_map_cr(map_cr_autozz)
 				end
 			end,
+			group = group,
 		})
+	end
+end
+
+---@param on? boolean  -- nil or boolean
+function M.toggle(on)
+	if on == nil then
+		M.enabled = not M.enabled
+	else
+		M.enabled = on
 	end
 end
 

@@ -22,6 +22,16 @@ vim-plug
 Plug 'LZDQ/nvim-autocenter'
 ```
 
+lazy
+
+```lua
+{
+	"LZDQ/nvim-autocenter",
+	event = 'InsertEnter',
+	opts = {}
+}
+```
+
 ## Usage
 
 Auto center the current line when inserting.
@@ -63,7 +73,7 @@ require("nvim-autocenter").setup{
 	filetypes = {
 		-- Enable or disable filetypes. Use REGEX!!
 		-- Wildcard * doesn't work, use .* plz.
-		-- disabled rules beats enabled rules when contradicting.
+		-- disabled rules beat enabled rules when contradicting.
 		enabled = { ".*" },
 		disabled = { "json" },
 	}
@@ -74,6 +84,14 @@ require("nvim-autocenter").setup{
 
 Caching the last line number to avoid recursion and improve performance.
 
+## Lua API
+
+`require("nvim-autocenter").toggle(true)` to enable.
+
+`require("nvim-autocenter").toggle(false)` to disable.
+
+`require("nvim-autocenter").toggle()` to toggle.
+
 ## Plugins supported
 
 [windwp/nvim-autopairs](https://github.com/windwp/nvim-autopairs)
@@ -82,4 +100,5 @@ Automatically center when inserting newline inside curly brackets.
 
 ## TODO
 
-1. - [x] Add more support for nvim-autopairs
+1. - [x] Add more support for nvim-autopairs.
+1. - [x] Add lua `toggle(on?)` API.
